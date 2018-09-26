@@ -13,7 +13,7 @@ export default class App extends Component {
         pairData: {
           btc: [
             {
-              askPrice: 6739,
+              askPrice: 6740,
               bidPrice: 6721,
               exchange: 'Yobit'
             },
@@ -34,33 +34,49 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    // Currrency
-    this.currencyInterval = runFirstInterval(() => {
-      axios
-        .get(
-          'http://free.currencyconverterapi.com/api/v5/convert?q=USD_ZAR&compact=y'
-        )
-        .then(resp => resp.data.USD_ZAR.val)
-        .then(zarRate => this.setState({ zarRate }))
-        .catch(err => console.log('error', err))
-    }, 1000 * 60 * 15)
-    // Luno API
-    this.lunoPrice = runFirstInterval(() => {
-      axios
-        .get('https://api.mybitx.com/api/1/ticker?pair=XBTZAR')
-        .then(resp => resp.data)
-        .then(data => this.setState({ lunoData: data }))
-        .catch(err => console.log('error', err))
-    }, 1000 * 5)
-    // Kraken API
-    this.krakenPrice = runFirstInterval(() => {
-      axios
-        .get('https://api.mybitx.com/api/1/ticker?pair=XBTZAR')
-        .then(resp => resp.data)
-        .then(data => this.setState({ lunoData: data }))
-        .catch(err => console.log('error', err))
-    }, 1000 * 5)
+    var ws = new WebSocket('ws://localhost:5000/', 'echo-protocol')
+
+    ws.onopen = function() {
+      console.log('Connection open...')
+    }
+
+    ws.onmessage = function(evt) {
+      console.log('Message received = ' + evt.data)
+    }
+
+    ws.onclose = function() {
+      console.log('Connection closed...')
+    }
   }
+
+  // componentDidMount() {
+  //   // Currrency
+  //   this.currencyInterval = runFirstInterval(() => {
+  //     axios
+  //       .get(
+  //         'http://free.currencyconverterapi.com/api/v5/convert?q=USD_ZAR&compact=y'
+  //       )
+  //       .then(resp => resp.data.USD_ZAR.val)
+  //       .then(zarRate => this.setState({ zarRate }))
+  //       .catch(err => console.log('error', err))
+  //   }, 1000 * 60 * 15)
+  //   // Luno API
+  //   this.lunoPrice = runFirstInterval(() => {
+  //     axios
+  //       .get('https://api.mybitx.com/api/1/ticker?pair=XBTZAR')
+  //       .then(resp => resp.data)
+  //       .then(data => this.setState({ lunoData: data }))
+  //       .catch(err => console.log('error', err))
+  //   }, 1000 * 5)
+  //   // Kraken API
+  //   this.krakenPrice = runFirstInterval(() => {
+  //     axios
+  //       .get('https://api.mybitx.com/api/1/ticker?pair=XBTZAR')
+  //       .then(resp => resp.data)
+  //       .then(data => this.setState({ lunoData: data }))
+  //       .catch(err => console.log('error', err))
+  //   }, 1000 * 5)
+  // }
 
   render() {
     console.log(this.state)
