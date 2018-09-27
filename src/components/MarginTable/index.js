@@ -1,42 +1,38 @@
 import React, { Component } from 'react'
 
 export default class MarginTable extends Component {
+  _renderMargins() {
+    return this.props.marginData.map((margin, index) => {
+      const { exchangeA, exchangeB, difference, margin: marginStat } = margin
+
+      return (
+        <tr key={index}>
+          <th scope="row">{`${exchangeA.name} (${exchangeA.price})`}</th>
+          <td>{`${parseFloat((marginStat * 100).toFixed(2))} %`}</td>
+          <td>{`${exchangeB.name} (${exchangeB.price})`}</td>
+          <td>{difference}</td>
+        </tr>
+      )
+    })
+  }
+
   render() {
-   return (
+    const { marginData } = this.props
+
+    return (
       <div className="container">
-        <h3 className="text-center text-uppercase mt-3 mb-3">
-          {this.props.pair}
-        </h3>
+        <h3 className="text-center text-uppercase mt-3 mb-3">{this.props.pair}</h3>
 
         <table className="table">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Exchange A</th>
+              <th scope="col">Margin</th>
+              <th scope="col">Exchange B</th>
+              <th scope="col">Difference</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
+          <tbody>{!marginData || this._renderMargins()}</tbody>
         </table>
       </div>
     )

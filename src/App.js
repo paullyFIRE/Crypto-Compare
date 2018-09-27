@@ -1,85 +1,67 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import { MarginTable } from './components'
-
-import { runFirstInterval } from './lib/helpers'
+import { MarginTable, CurrencyTable, ExchangesTable } from './components'
+import io from 'socket.io-client'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      data: {
-        pairData: {
-          btc: [
-            {
-              askPrice: 6740,
-              bidPrice: 6721,
-              exchange: 'Yobit'
-            },
-            {
-              askPrice: 6615,
-              bidPrice: 6613,
-              exchange: 'Kraken'
-            },
-            {
-              askPrice: 6640,
-              bidPrice: 6632,
-              exchange: 'Bittrex'
-            }
-          ]
-        }
-      }
+      lastPollUpdate: new Date(),
+      currencies: [],
+      exchangePrices: [],
+      margins: []
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.lastPollUpdate !== this.state.lastPollUpdate) {
+      if (this.ticker) {
+        clearInterval(this.ticker)
+      }
+
+      this.ticker = setInterval(() => {
+        this.forceUpdate()
+      }, 1000)
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.ticker)
+  }
+
+  _refreshStats() {
+    this.socket.send('RESET')
   }
 
   componentDidMount() {
-    var ws = new WebSocket('ws://localhost:5000/', 'echo-protocol')
+    this.socket = io.connect('http://localhost:5000')
+    this.socket.on('message', message => {
+      if (message) {
+        const { currencies, exchangePrices, margins } = message
 
-    ws.onopen = function() {
-      console.log('Connection open...')
-    }
-
-    ws.onmessage = function(evt) {
-      console.log('Message received = ' + evt.data)
-    }
-
-    ws.onclose = function() {
-      console.log('Connection closed...')
-    }
+        this.setState({
+          lastPollUpdate: new Date(),
+          currencies,
+          exchangePrices,
+          margins
+        })
+      }
+    })
   }
 
-  // componentDidMount() {
-  //   // Currrency
-  //   this.currencyInterval = runFirstInterval(() => {
-  //     axios
-  //       .get(
-  //         'http://free.currencyconverterapi.com/api/v5/convert?q=USD_ZAR&compact=y'
-  //       )
-  //       .then(resp => resp.data.USD_ZAR.val)
-  //       .then(zarRate => this.setState({ zarRate }))
-  //       .catch(err => console.log('error', err))
-  //   }, 1000 * 60 * 15)
-  //   // Luno API
-  //   this.lunoPrice = runFirstInterval(() => {
-  //     axios
-  //       .get('https://api.mybitx.com/api/1/ticker?pair=XBTZAR')
-  //       .then(resp => resp.data)
-  //       .then(data => this.setState({ lunoData: data }))
-  //       .catch(err => console.log('error', err))
-  //   }, 1000 * 5)
-  //   // Kraken API
-  //   this.krakenPrice = runFirstInterval(() => {
-  //     axios
-  //       .get('https://api.mybitx.com/api/1/ticker?pair=XBTZAR')
-  //       .then(resp => resp.data)
-  //       .then(data => this.setState({ lunoData: data }))
-  //       .catch(err => console.log('error', err))
-  //   }, 1000 * 5)
-  // }
-
   render() {
-    console.log(this.state)
-    return <MarginTable pair="btc" data={this.state.data.pairData.btc} />
+    const { margins, currencies, exchangePrices, lastPollUpdate } = this.state
+
+    const elapsedTime = Math.floor((new Date() - lastPollUpdate) / 1000)
+
+    return [
+      <a key={4} className="btn" onClick={() => this._refreshStats()}>
+        {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
+      </a>,
+      <MarginTable key={1} pair="btc" marginData={margins} />,
+      <CurrencyTable key={2} title="Currencies" currencyData={currencies} />,
+      <ExchangesTable key={3} title="Exchanges" exchangeData={exchangePrices} />
+    ]
   }
 }

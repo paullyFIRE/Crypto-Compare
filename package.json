@@ -10,7 +10,9 @@
     "jquery": "^3.3.1",
     "popper.js": "^1.14.4",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
@@ -20,7 +22,7 @@
   },
   "scripts": {
     "server": "nodemon ./server/index.js",
-    "client": "parcel ./src/index.html",
+    "client": "parcel watch ./src/index.html",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "keywords": [],

@@ -1,29 +1,29 @@
 const express = require('express')
-
 const app = express()
-var expressWs = require('express-ws')(app)
+const server = require('http').Server(app)
 
-app.get('/', (req, res) => {
-  res.send({ express: 'Hello From Express' })
+const io = require('socket.io')(server)
+const MarginService = require('./service/margins')(io)
+
+app.get('/', app.use(express.static('dist')))
+
+app.get('/stats', (req, res) => {
+  return res.send(MarginService.getState())
 })
 
-app.ws('/', function(ws, req) {
-  // ws.on('message', function(msg) {
-  //   ws.send(msg)
-  // })
-  let counter = 0
+io.on('connection', function(socket) {
+  socket.send(MarginService.getState())
 
-  setInterval(function() {
-    if (counter === 10) {
-      ws.send('Thanks! No more, ' + counter)
-      clearInterval(this)
-    } else {
-      console.log('sending', counter)
-      ws.send(counter++)
+  socket.on('message', function(message) {
+    switch (message) {
+      case 'RESET':
+        return socket.send(MarginService.forceUpdate())
+      default:
+        return
     }
-  }, 500)
+  })
 })
 
 const port = process.env.PORT || 5000
 
-app.listen(port, () => console.log(`Listening on port ${port}`))
+server.listen(port, () => console.log(`Listening on port ${port}`))

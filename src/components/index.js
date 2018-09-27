@@ -1,3 +1,5 @@
 import MarginTable from './MarginTable'
+import CurrencyTable from './CurrencyTable'
+import ExchangesTable from './ExchangesTable'
 
-export { MarginTable }
+export { MarginTable, CurrencyTable, ExchangesTable }
