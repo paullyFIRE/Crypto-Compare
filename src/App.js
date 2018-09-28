@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MarginTable, CurrencyTable, ExchangesTable } from './components'
+import { MarginTable, CurrencyTable, ExchangesTable, Table } from './components'
 import io from 'socket.io-client'
 
 export default class App extends Component {
@@ -56,10 +56,16 @@ export default class App extends Component {
     const elapsedTime = Math.floor((new Date() - lastPollUpdate) / 1000)
 
     return [
-      <a key={4} className="btn" onClick={() => this._refreshStats()}>
-        {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
-      </a>,
-      <MarginTable key={1} pair="btc" marginData={margins} />,
+      <div key={4} className="row mt-4">
+        <button
+          type="button"
+          className="btn btn-primary text-center mx-auto"
+          onClick={() => this._refreshStats()}
+        >
+          {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
+        </button>
+      </div>,
+      <MarginTable key={1} marginData={margins} />,
       <CurrencyTable key={2} title="Currencies" currencyData={currencies} />,
       <ExchangesTable key={3} title="Exchanges" exchangeData={exchangePrices} />
     ]

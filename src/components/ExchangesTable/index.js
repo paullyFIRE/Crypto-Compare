@@ -1,34 +1,32 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { Table } from '../'
 
-export default class ExchangesTable extends Component {
-  _renderExchangePrices() {
-    return this.props.exchangeData.map(({ name, price, lastUpdated }, index) => (
-      <tr key={index}>
-        <th scope="row">{name}</th>
-        <td>{price}</td>
-        <td>{lastUpdated}</td>
-      </tr>
-    ))
+import { formatRowDataWithConfigSelectors, getHeadingsFromConfig } from '../../lib/helpers'
+
+const config = [
+  {
+    heading: 'Exchange',
+    paraName: 'name',
+    valueSelector: ([index, row]) => row.name
+  },
+  {
+    heading: 'BTC/ZAR',
+    paraName: 'price',
+    valueSelector: ([index, row]) => row.price
+  },
+  {
+    heading: 'Last Updated',
+    paraName: 'lastUpdated',
+    valueSelector: ([index, row]) => row.lastUpdated
   }
+]
 
-  render() {
-    const { title, exchangeData } = this.props
+const headings = getHeadingsFromConfig(config)
 
-    return (
-      <div className="container">
-        <h3 className="text-center mt-3 mb-3">{title}</h3>
+const ExchangesTable = ({ exchangeData }) => {
+  const rowData = !exchangeData.length ? [] : formatRowDataWithConfigSelectors(exchangeData, config)
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Exchange</th>
-              <th scope="col">BTC Rate/ZAR</th>
-              <th scope="col">Last Updated</th>
-            </tr>
-          </thead>
-          <tbody>{!exchangeData || this._renderExchangePrices()}</tbody>
-        </table>
-      </div>
-    )
-  }
+  return <Table title="Exchanges" headings={headings} rows={rowData} />
 }
+
+export default ExchangesTable
