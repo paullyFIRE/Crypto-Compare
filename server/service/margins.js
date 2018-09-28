@@ -46,21 +46,34 @@ const Margins = socket => {
   }
 
   this.pollPrices = async () => {
-    const exchangePrices = await Promise.all(
-      exchanges.map(exchange => apiCall(exchange.baseURL, exchange.priceSelector))
-    )
+    let exchangePrices
+    try {
+      exchangePrices = await Promise.all(
+        exchanges.map(exchange => apiCall(exchange.baseURL, exchange.priceSelector))
+      )
+    } catch (err) {
+      new Error(err.message)
+    }
 
     const lastUpdated = new Date().toString()
 
-    const exchangeStats = exchanges.map((exchange, index) => ({
-      name: exchange.exchangeName,
-      price: parseInt(
-        exchangePrices[index] *
-          (exchange.currency !== 'ZAR' ? this.currencies[exchange.currency].rate : 1),
-        10
-      ),
-      lastUpdated
-    }))
+    const exchangeStats = exchanges.map((exchange, index) => {
+      const exchangeApiData = exchangePrices[index]
+
+      if (exchangeApiData) {
+        return {
+          name: exchange.exchangeName,
+          price: parseInt(
+            exchangeApiData *
+              (exchange.currency !== 'ZAR' ? this.currencies[exchange.currency].rate : 1),
+            10
+          ),
+          lastUpdated
+        }
+      }
+
+      return this.exchangeStats[index] || {}
+    })
 
     this.exchangeStats = exchangeStats
 
