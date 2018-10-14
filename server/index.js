@@ -3,7 +3,7 @@ const app = express()
 const server = require('http').Server(app)
 
 const io = require('socket.io')(server)
-const MarginService = require('./service/margins')(io)
+const MarginService = require('./service/margins2')(io)
 
 app.get('/', app.use(express.static('dist')))
 

@@ -9,7 +9,7 @@ export default class App extends Component {
     this.state = {
       lastPollUpdate: new Date(),
       currencies: [],
-      exchangePrices: [],
+      exchanges: [],
       margins: []
     }
   }
@@ -38,12 +38,13 @@ export default class App extends Component {
     this.socket = io.connect('http://localhost:5000')
     this.socket.on('message', message => {
       if (message) {
-        const { currencies, exchangePrices, margins } = message
+        console.log('message: ', message)
+        const { currencies, exchanges, margins } = message
 
         this.setState({
           lastPollUpdate: new Date(),
           currencies,
-          exchangePrices,
+          exchanges,
           margins
         })
       }
@@ -51,7 +52,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { margins, currencies, exchangePrices, lastPollUpdate } = this.state
+    const { margins, currencies, exchanges, lastPollUpdate } = this.state
 
     const elapsedTime = Math.floor((new Date() - lastPollUpdate) / 1000)
 
@@ -64,10 +65,10 @@ export default class App extends Component {
         >
           {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
         </button>
-      </div>,
-      <MarginTable key={1} marginData={margins} />,
-      <CurrencyTable key={2} title="Currencies" currencyData={currencies} />,
-      <ExchangesTable key={3} title="Exchanges" exchangeData={exchangePrices} />
+      </div>
+      // <MarginTable key={1} marginData={margins} />,
+      // <CurrencyTable key={2} title="Currencies" currencyData={currencies} />,
+      // <ExchangesTable key={3} title="Exchanges" exchangeData={exchanges} />
     ]
   }
 }
