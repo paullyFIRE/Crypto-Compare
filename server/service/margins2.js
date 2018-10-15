@@ -8,7 +8,9 @@ const Margins = socket => {
   this.currencies = {}
   this.margins = []
 
-  this.broadcast = () => socket.send(this.getState())
+  this.broadcast = () => {
+    socket.send(this.getState())
+  }
 
   this.updateCurrency = async () => {
     const api_rates = await Promise.all(
@@ -176,11 +178,19 @@ const Margins = socket => {
     this.startPolls()
   }
 
-  this.getState = () => ({
-    currencies: this.currencies,
-    exchanges: { buy: this.buyExchanges, sell: this.sellExchanges },
-    margins: this.margins
-  })
+  this.getState = flag => {
+    const state = {
+      currencies: this.currencies,
+      exchanges: { buy: this.buyExchanges, sell: this.sellExchanges },
+      margins: this.margins
+    }
+
+    if (!flag) {
+      return state
+    }
+
+    return state[flag]
+  }
 
   this.init()
 

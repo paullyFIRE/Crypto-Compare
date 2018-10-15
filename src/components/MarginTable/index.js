@@ -5,33 +5,79 @@ import { formatRowDataWithConfigSelectors, getHeadingsFromConfig } from '../../l
 
 const config = [
   {
-    heading: 'Exchange A',
-    paraName: 'exchangeA',
-    valueSelector: ([index, row]) => `${row.exchangeA.name} (R ${row.exchangeA.price})`
+    heading: 'Buy Exchange',
+    valueSelector: ([index, row]) => `${row.buy.name}`
   },
   {
-    heading: 'Margin',
-    paraName: 'margin',
-    valueSelector: ([index, row]) => `${parseFloat((row.margin * 100).toFixed(2))} %`
+    heading: 'Buy Amount (excl. fees)',
+    valueSelector: ([index, row]) => `${row.buy.transactionAmount}`
   },
   {
-    heading: 'Exchange B',
-    paraName: 'exchangeB',
-    valueSelector: ([index, row]) => `${row.exchangeB.name} (R ${row.exchangeB.price})`
+    heading: 'Sell Exchange',
+    valueSelector: ([index, row]) => `${row.sell.name}`
   },
   {
-    heading: 'Difference',
-    paraName: 'difference',
-    valueSelector: ([index, row]) => `R${row.difference}`
+    heading: 'Volume',
+    valueSelector: ([index, row]) => `${row.volume}`
+  },
+  {
+    heading: 'Buy Amount (excl. fees)',
+    valueSelector: ([index, row]) => `${row.sell.transactionAmount}`
+  },
+  {
+    heading: 'Transaction Margin',
+    valueSelector: ([index, row]) => `${row.netMargin}`
+  },
+  {
+    heading: 'Transaction Profit',
+    valueSelector: ([index, row]) => `${row.netDifference}`
+  },
+  {
+    heading: 'Total Fees',
+    valueSelector: ([index, row]) => `${row.totalFees}`
   }
 ]
 
 const headings = getHeadingsFromConfig(config)
 
-const MarginTable = ({ marginData }) => {
-  const rowData = !marginData.length ? [] : formatRowDataWithConfigSelectors(marginData, config)
+class MarginTable extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      sortIndex: 3,
+      sortOrder: 'ASC'
+    }
 
-  return <Table title="BTC" headings={headings} rows={rowData} />
+    this.toggleSort = this.toggleSort.bind(this)
+  }
+
+  toggleSort(index) {
+    const columnIndex = index.nativeEvent.srcElement.cellIndex
+
+    const { sortOrder, sortIndex } = this.state
+    const oppositeOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC'
+
+    this.setState(prevState => {
+      const nextOrder = sortIndex !== prevState.sortIndex ? sortOrder : oppositeOrder
+
+      return {
+        sortIndex: columnIndex,
+        sortOrder: nextOrder
+      }
+    })
+  }
+
+  render() {
+    const { marginData = [] } = this.props
+    const { sortIndex, sortOrder } = this.state
+    const rowData = formatRowDataWithConfigSelectors(marginData, config)
+
+    const sortedData = rowData.sort(
+      (a, b) => (sortOrder === 'ASC' ? a[sortIndex] - b[sortIndex] : b[sortIndex] - a[sortIndex])
+    )
+
+    return <Table sortFn={this.toggleSort} title="Margins" headings={headings} rows={sortedData} />
+  }
 }
 
 export default MarginTable

@@ -20,11 +20,11 @@ const config = [
 
 const headings = getHeadingsFromConfig(config)
 
-const CurrencyTable = ({ currencyData }) => {
+const CurrencyTable = ({ currencyData, title }) => {
   // const rowData = !currencyData.length ? [] : formatRowDataWithConfigSelectors(currencyData, config)
   const rowData = formatRowDataWithConfigSelectors(currencyData, config)
 
-  return <Table title="BTC" headings={headings} rows={rowData} />
+  return <Table title={title} headings={headings} rows={rowData} />
 }
 
 export default CurrencyTable

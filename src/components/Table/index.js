@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
-const renderHeadings = headings =>
+const renderHeadings = (headings, sortFn) =>
   headings.map((heading, index) => (
-    <th key={index} scope="col" className="text-center align-middle">
+    <th onClick={sortFn} key={index} scope="col" className="text-center align-middle">
       {heading}
     </th>
   ))
@@ -16,13 +16,13 @@ const renderRowItems = rowData =>
 
 const renderRows = rows => rows.map((row, index) => <tr key={index}>{renderRowItems(row)}</tr>)
 
-const Table = ({ title, headings, rows }) => (
+const Table = ({ title, headings, rows, sortFn }) => (
   <div className="container">
     <h3 className="text-center mt-3 mb-3">{title}</h3>
 
     <table className="table table-bordered table-hover table-sm">
       <thead className="thead-dark">
-        <tr>{headings && renderHeadings(headings)}</tr>
+        <tr>{headings && renderHeadings(headings, sortFn)}</tr>
       </thead>
       <tbody>{rows && renderRows(rows)}</tbody>
     </table>

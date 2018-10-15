@@ -5,10 +5,36 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const MarginService = require('./service/margins2')(io)
 
+const { groupByVolume, groupByExchange } = require('./service/helpers')
+
 app.get('/', app.use(express.static('dist')))
 
-app.get('/stats', (req, res) => {
+app.get('/api/stats', (req, res) => {
   return res.send(MarginService.getState())
+})
+
+app.get('/api/margins', (req, res) => {
+  return res.send(MarginService.getState('margins').sort((a, b) => b.netMargin - a.netMargin))
+})
+
+app.get('/api/margins/lite', (req, res) => {
+  return res.send(
+    MarginService.getState('margins')
+      .reduce(
+        (acc, margin) => [
+          ...acc,
+          {
+            buy: margin.buy.name,
+            sell: margin.sell.name,
+            vol: margin.volume,
+            netMargin: margin.netMargin,
+            netDifference: margin.netDifference
+          }
+        ],
+        []
+      )
+      .sort((a, b) => b.netMargin - a.netMargin)
+  )
 })
 
 io.on('connection', function(socket) {

@@ -17,6 +17,11 @@ const compileApiCalls = (configExchanges, apiGET) =>
     ]
   }, [])
 
+const groupByVolume = (margins, volume) => margins.filter(margin => margin.volume === volume)
+
+const groupByExchange = (margins, exchange) =>
+  margins.filter(margin => margin.buy.name === exchange || margin.sell.name === exchange)
+
 const startWithInterval = (fn, duration) => {
   fn()
   return setInterval(() => fn(), duration)
@@ -24,5 +29,7 @@ const startWithInterval = (fn, duration) => {
 
 module.exports = {
   compileApiCalls,
+  groupByVolume,
+  groupByExchange,
   startWithInterval
 }

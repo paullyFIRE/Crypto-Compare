@@ -18,6 +18,20 @@ const exchanges = [
     type: 'sell'
   },
   {
+    exchangeName: 'Ice3x',
+    apiData: [
+      {
+        baseURL: 'https://ice3x.com/api/v1/orderbook/info?pair_id=3',
+        selector: resp => resp.data.response.entities.asks,
+        normalizer: ({ price, amount }) => ({ price, volume: amount }),
+        dataLabel: 'orders'
+      }
+    ],
+    fees: 1,
+    currency: 'ZAR',
+    type: 'sell'
+  },
+  {
     exchangeName: 'Kraken',
     apiData: [
       {

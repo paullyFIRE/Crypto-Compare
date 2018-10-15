@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { MarginTable, CurrencyTable, ExchangesTable, Table } from './components'
 import io from 'socket.io-client'
 
@@ -57,18 +58,49 @@ export default class App extends Component {
     const elapsedTime = Math.floor((new Date() - lastPollUpdate) / 1000)
 
     return [
-      <div key={4} className="row mt-4">
-        <button
-          type="button"
-          className="btn btn-primary text-center mx-auto"
-          onClick={() => this._refreshStats()}
-        >
-          {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
-        </button>
-      </div>
-      // <MarginTable key={1} marginData={margins} />,
-      // <CurrencyTable key={2} title="Currencies" currencyData={currencies} />,
-      // <ExchangesTable key={3} title="Exchanges" exchangeData={exchanges} />
+      <Router key={1}>
+        <div>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/currencies">Currencies</Link>
+            </li>
+            <li>
+              <Link to="/exchanges">Exchanges</Link>
+            </li>
+            <li>
+              <Link to="/margins">Margins</Link>
+            </li>
+          </ul>
+          <div key={4} className="row mt-4">
+            <button
+              type="button"
+              className="btn btn-primary text-center mx-auto"
+              onClick={() => this._refreshStats()}
+            >
+              {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
+            </button>
+          </div>
+
+          <hr />
+
+          <Route exact path="/" component={null} />
+          <Route
+            path="/currencies"
+            render={() => <CurrencyTable title="Currencies" currencyData={currencies} />}
+          />
+          <Route
+            path="/margins"
+            render={() => <MarginTable key={1} title="Margins" marginData={margins} />}
+          />
+          <Route
+            path="/exchanges"
+            render={() => <ExchangesTable key={3} title="Exchanges" exchangeData={exchanges} />}
+          />
+        </div>
+      </Router>
     ]
   }
 }
