@@ -18,24 +18,28 @@ const config = [
     valueSelector: ([index, row]) => `${row.sell.name}`
   },
   {
-    heading: 'Volume',
-    valueSelector: ([index, row]) => parseFloat(row.volume).toFixed(2)
-  },
-  {
     heading: 'Sell Amount (excl. fees) (R)',
     valueSelector: ([index, row]) => parseFloat(row.sell.transactionAmount).toFixed(2)
+  },
+  {
+    heading: 'Volume',
+    valueSelector: ([index, row]) => parseFloat(row.volume).toFixed(2)
   },
   {
     heading: 'Transaction Margin (%)',
     valueSelector: ([index, row]) => parseFloat(row.netMargin).toFixed(2)
   },
   {
-    heading: 'Transaction Profit (R)',
+    heading: 'Gross Difference (R)',
     valueSelector: ([index, row]) => parseFloat(row.netDifference).toFixed(2)
   },
   {
     heading: 'Total Fees (R)',
     valueSelector: ([index, row]) => parseFloat(row.totalFees).toFixed(2)
+  },
+  {
+    heading: 'Net Difference (R)',
+    valueSelector: ([index, row]) => parseFloat(row.netDifference - row.totalFees).toFixed(2)
   }
 ]
 
