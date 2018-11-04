@@ -7,7 +7,8 @@ const MarginService = require('./service/margins2')(io)
 
 const { groupByVolume, groupByExchange } = require('./service/helpers')
 
-app.get('/', app.use(express.static('dist')))
+// app.get('/', app.use(express.static('dist')))
+app.get('/', app.use(express.static('src')))
 
 app.get('/api/stats', (req, res) => {
   return res.send(MarginService.getState())
