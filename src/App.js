@@ -37,7 +37,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.socket = io.connect('http://localhost:5000')
+    this.socket = io.connect('https://immense-cove-23471.herokuapp.com:5000/')
     this.socket.on('message', message => {
       if (message) {
         console.log('message: ', message)
