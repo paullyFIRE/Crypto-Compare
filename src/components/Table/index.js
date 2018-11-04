@@ -1,32 +1,101 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-const renderHeadings = (headings, sortFn) =>
-  headings.map((heading, index) => (
-    <th onClick={sortFn} key={index} scope="col" className="text-center align-middle">
-      {heading}
-    </th>
-  ))
+class Table extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      sortIndex: 1,
+      sortOrder: 'ASC'
+    }
 
-const renderRowItems = rowData =>
-  rowData.map((rowItem, index) => (
-    <td key={index} scope={index === 0 ? 'row' : null} className="text-center align-middle">
-      {rowItem}
-    </td>
-  ))
+    this.toggleSort = this.toggleSort.bind(this)
+  }
 
-const renderRows = rows => rows.map((row, index) => <tr key={index}>{renderRowItems(row)}</tr>)
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      nextState.sortIndex === this.state.sortIndex ||
+      nextState.sortOrder === this.state.sortOrder
+    ) {
+      return false
+    }
+    return true
+  }
 
-const Table = ({ title, headings, rows, sortFn }) => (
-  <div className="container">
-    <h3 className="text-center mt-3 mb-3">{title}</h3>
+  toggleSort(index) {
+    const columnIndex = index.nativeEvent.srcElement.cellIndex
 
-    <table className="table table-bordered table-hover table-sm">
-      <thead className="thead-dark">
-        <tr>{headings && renderHeadings(headings, sortFn)}</tr>
-      </thead>
-      <tbody>{rows && renderRows(rows)}</tbody>
-    </table>
-  </div>
-)
+    const { sortOrder, sortIndex } = this.state
+    const oppositeOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC'
+
+    this.setState(prevState => {
+      const nextOrder = sortIndex !== prevState.sortIndex ? sortOrder : oppositeOrder
+
+      return {
+        sortIndex: columnIndex,
+        sortOrder: nextOrder
+      }
+    })
+  }
+
+  transformData(rows) {
+    const { sortOrder, sortIndex } = this.state
+
+    return rows.sort(
+      (a, b) => (sortOrder === 'ASC' ? a[sortIndex] - b[sortIndex] : b[sortIndex] - a[sortIndex])
+    )
+  }
+
+  renderHeadings(headings) {
+    return headings.map((heading, index) => (
+      <th onClick={this.toggleSort} key={index} scope="col" className="text-center align-middle">
+        {heading}
+      </th>
+    ))
+  }
+
+  renderRowItems(rowData) {
+    return rowData.map((rowItem, index) => (
+      <td key={index} scope={index === 0 ? 'row' : null} className="text-center align-middle">
+        {rowItem}
+      </td>
+    ))
+  }
+
+  renderRows(rows) {
+    return rows.map((row, index) => [
+      <tr
+        // onClick={() =>
+        //   this.props.history.push({
+        //     pathname: '/margin',
+        //     state: {
+        //       headings: this.props.headings,
+        //       row
+        //     }
+        //   })
+        // }
+        key={index}
+      >
+        {this.renderRowItems(row)}
+      </tr>
+    ])
+  }
+
+  render() {
+    const { title, headings, rows } = this.props
+
+    return (
+      <div className="container">
+        <h3 className="text-center mt-3 mb-3">{title}</h3>
+
+        <table className="table table-bordered table-hover table-sm">
+          <thead className="thead-dark">
+            <tr>{headings && this.renderHeadings(headings)}</tr>
+          </thead>
+          <tbody>{rows && this.renderRows(this.transformData(rows))}</tbody>
+        </table>
+      </div>
+    )
+  }
+}
 
 export default Table

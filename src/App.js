@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { MarginTable, CurrencyTable, ExchangesTable, Table } from './components'
+import { MarginDetail } from './containers'
 import io from 'socket.io-client'
 
 export default class App extends Component {
@@ -62,7 +63,9 @@ export default class App extends Component {
         <div>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link active={true} to="/">
+                Home
+              </Link>
             </li>
             <li>
               <Link to="/currencies">Currencies</Link>
@@ -95,9 +98,16 @@ export default class App extends Component {
             path="/margins"
             render={() => <MarginTable key={1} title="Margins" marginData={margins} />}
           />
+          <Route path="/margin" component={MarginDetail} />
           <Route
             path="/exchanges"
-            render={() => <ExchangesTable key={3} title="Exchanges" exchangeData={exchanges} />}
+            render={() => (
+              <ExchangesTable
+                key={3}
+                title="Exchanges"
+                exchangeData={[...exchanges.buy, ...exchanges.sell]}
+              />
+            )}
           />
         </div>
       </Router>

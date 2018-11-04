@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { Table } from '../'
 
 import { formatRowDataWithConfigSelectors, getHeadingsFromConfig } from '../../lib/helpers'
@@ -9,8 +10,8 @@ const config = [
     valueSelector: ([index, row]) => `${row.buy.name}`
   },
   {
-    heading: 'Buy Amount (excl. fees)',
-    valueSelector: ([index, row]) => `${row.buy.transactionAmount}`
+    heading: 'Buy Amount (excl. fees) (R)',
+    valueSelector: ([index, row]) => parseFloat(row.buy.transactionAmount).toFixed(2)
   },
   {
     heading: 'Sell Exchange',
@@ -18,66 +19,35 @@ const config = [
   },
   {
     heading: 'Volume',
-    valueSelector: ([index, row]) => `${row.volume}`
+    valueSelector: ([index, row]) => parseFloat(row.volume).toFixed(2)
   },
   {
-    heading: 'Buy Amount (excl. fees)',
-    valueSelector: ([index, row]) => `${row.sell.transactionAmount}`
+    heading: 'Sell Amount (excl. fees) (R)',
+    valueSelector: ([index, row]) => parseFloat(row.sell.transactionAmount).toFixed(2)
   },
   {
-    heading: 'Transaction Margin',
-    valueSelector: ([index, row]) => `${row.netMargin}`
+    heading: 'Transaction Margin (%)',
+    valueSelector: ([index, row]) => parseFloat(row.netMargin).toFixed(2)
   },
   {
-    heading: 'Transaction Profit',
-    valueSelector: ([index, row]) => `${row.netDifference}`
+    heading: 'Transaction Profit (R)',
+    valueSelector: ([index, row]) => parseFloat(row.netDifference).toFixed(2)
   },
   {
-    heading: 'Total Fees',
-    valueSelector: ([index, row]) => `${row.totalFees}`
+    heading: 'Total Fees (R)',
+    valueSelector: ([index, row]) => parseFloat(row.totalFees).toFixed(2)
   }
 ]
 
 const headings = getHeadingsFromConfig(config)
 
 class MarginTable extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      sortIndex: 3,
-      sortOrder: 'ASC'
-    }
-
-    this.toggleSort = this.toggleSort.bind(this)
-  }
-
-  toggleSort(index) {
-    const columnIndex = index.nativeEvent.srcElement.cellIndex
-
-    const { sortOrder, sortIndex } = this.state
-    const oppositeOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC'
-
-    this.setState(prevState => {
-      const nextOrder = sortIndex !== prevState.sortIndex ? sortOrder : oppositeOrder
-
-      return {
-        sortIndex: columnIndex,
-        sortOrder: nextOrder
-      }
-    })
-  }
-
   render() {
-    const { marginData = [] } = this.props
-    const { sortIndex, sortOrder } = this.state
+    const { marginData = [], history } = this.props
     const rowData = formatRowDataWithConfigSelectors(marginData, config)
 
-    const sortedData = rowData.sort(
-      (a, b) => (sortOrder === 'ASC' ? a[sortIndex] - b[sortIndex] : b[sortIndex] - a[sortIndex])
-    )
-
-    return <Table sortFn={this.toggleSort} title="Margins" headings={headings} rows={sortedData} />
+    return <Table title="Margins" headings={headings} rows={rowData} history={history} />
   }
 }
 
-export default MarginTable
+export default withRouter(MarginTable)

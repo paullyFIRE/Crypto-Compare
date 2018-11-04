@@ -6,18 +6,28 @@ import { formatRowDataWithConfigSelectors, getHeadingsFromConfig } from '../../l
 const config = [
   {
     heading: 'Exchange',
-    paraName: 'name',
-    valueSelector: ([index, row]) => row.name
+    paraName: 'exchangeName',
+    valueSelector: ([index, row]) => row.exchangeName
   },
   {
-    heading: 'BTC/ZAR',
+    heading: 'Exchange Type',
+    paraName: 'type',
+    valueSelector: ([index, row]) => row.type
+  },
+  {
+    heading: 'Currency',
+    paraName: 'currency',
+    valueSelector: ([index, row]) => row.currency
+  },
+  {
+    heading: 'Price',
     paraName: 'price',
-    valueSelector: ([index, row]) => row.price
+    valueSelector: ([index, row]) => row.price && parseFloat(row.price).toFixed(2)
   },
   {
-    heading: 'Last Updated',
-    paraName: 'lastUpdated',
-    valueSelector: ([index, row]) => row.lastUpdated
+    heading: 'Fees (%)',
+    paraName: 'fees',
+    valueSelector: ([index, row]) => row.fees
   }
 ]
 

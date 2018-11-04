@@ -25,6 +25,11 @@ const exchanges = [
         selector: resp => resp.data.response.entities.asks,
         normalizer: ({ price, amount }) => ({ price, volume: amount }),
         dataLabel: 'orders'
+      },
+      {
+        baseURL: 'https://ice3x.com/api/v1/orderbook/info?pair_id=3',
+        selector: resp => resp.data.response.entities.asks[0].price,
+        dataLabel: 'price'
       }
     ],
     fees: 1,
@@ -62,6 +67,11 @@ const exchanges = [
         selector: resp => resp.data.bids.slice(0, 30),
         normalizer: ([price, volume]) => ({ price, volume }),
         dataLabel: 'orders'
+      },
+      {
+        baseURL: 'https://www.bitstamp.net/api/order_book?group=1',
+        selector: resp => resp.data.bids[0][0],
+        dataLabel: 'price'
       }
     ],
     fees: 0.25,
