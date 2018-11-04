@@ -9,6 +9,7 @@
     "express-ws": "^4.0.0",
     "jquery": "^3.3.1",
     "mstats": "^1.0.1",
+    "parcel": "^1.10.3",
     "popper.js": "^1.14.4",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -23,7 +24,7 @@
     "parcel-bundler": "^1.9.7"
   },
   "scripts": {
-    "start": "parcel build ./src/index.html && node ./server/index.js",
+    "start": "parcel-bundler build ./src/index.html && node ./server/index.js",
     "server": "nodemon ./server/index.js",
     "client": "parcel watch ./src/index.html",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
