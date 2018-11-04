@@ -5,6 +5,7 @@ import { MarginDetail } from './containers'
 import io from 'socket.io-client'
 
 const port = process.env.PORT
+console.log('port: ', port);
 
 export default class App extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.socket = io.connect(`https://immense-cove-23471.herokuapp.com:${port || 5000}/`)
+    this.socket = io.connect(`/`)
     this.socket.on('message', message => {
       if (message) {
         console.log('message: ', message)
