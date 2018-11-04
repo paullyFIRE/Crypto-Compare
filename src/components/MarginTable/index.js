@@ -10,20 +10,20 @@ const config = [
     valueSelector: ([index, row]) => `${row.buy.name}`
   },
   {
-    heading: 'Buy Amount (excl. fees) (R)',
-    valueSelector: ([index, row]) => parseFloat(row.buy.transactionAmount).toFixed(2)
-  },
-  {
     heading: 'Sell Exchange',
     valueSelector: ([index, row]) => `${row.sell.name}`
   },
   {
-    heading: 'Sell Amount (excl. fees) (R)',
-    valueSelector: ([index, row]) => parseFloat(row.sell.transactionAmount).toFixed(2)
-  },
-  {
     heading: 'Volume',
     valueSelector: ([index, row]) => parseFloat(row.volume).toFixed(2)
+  },
+  {
+    heading: 'Buy Amount (excl. fees) (R)',
+    valueSelector: ([index, row]) => parseFloat(row.buy.transactionAmount).toFixed(2)
+  },
+  {
+    heading: 'Sell Amount (excl. fees) (R)',
+    valueSelector: ([index, row]) => parseFloat(row.sell.transactionAmount).toFixed(2)
   },
   {
     heading: 'Transaction Margin (%)',
