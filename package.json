@@ -27,7 +27,8 @@
     "start": "node ./server/index.js",
     "server": "nodemon ./server/index.js",
     "client": "parcel watch ./src/index.html",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "postinstall": "parcel build ./src/index.html"
   },
   "keywords": [],
   "author": "",
