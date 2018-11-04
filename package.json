@@ -23,7 +23,7 @@
     "parcel-bundler": "^1.9.7"
   },
   "scripts": {
-    "start": "node ./server/index.js",
+    "start": "parcel build ./src/index.html && node ./server/index.js",
     "server": "nodemon ./server/index.js",
     "client": "parcel watch ./src/index.html",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
