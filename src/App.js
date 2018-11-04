@@ -5,7 +5,7 @@ import { MarginDetail } from './containers'
 import io from 'socket.io-client'
 
 const port = process.env.PORT
-console.log('port: ', port);
+console.log('port: ', port)
 
 export default class App extends Component {
   constructor(props) {
@@ -63,20 +63,20 @@ export default class App extends Component {
 
     return [
       <Router key={1}>
-        <div>
-          <ul>
-            <li>
+        <div style={{ marginTop: 25 }}>
+          <ul style={{ display: 'flex', justifyContent: 'center' }}>
+            <li style={{ fontSize: 22 }}>
               <Link active={true} to="/">
                 Home
               </Link>
             </li>
-            <li>
+            <li style={{ marginLeft: 25, fontSize: 22  }}>
               <Link to="/currencies">Currencies</Link>
             </li>
-            <li>
+            <li style={{ marginLeft: 25, fontSize: 22  }}>
               <Link to="/exchanges">Exchanges</Link>
             </li>
-            <li>
+            <li style={{ marginLeft: 25, fontSize: 22  }}>
               <Link to="/margins">Margins</Link>
             </li>
           </ul>
