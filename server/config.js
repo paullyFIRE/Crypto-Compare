@@ -101,6 +101,28 @@ const exchanges = [
     fees: 0.1,
     currency: 'USD',
     type: 'buy'
+  },
+  {
+    exchangeName: 'Poloniex',
+    apiData: [
+      {
+        baseURL:
+          'https://poloniex.com/public?command=returnOrderBook&currencyPair=USDT_BTC&depth=25',
+        selector: resp => resp.data.bids,
+        normalizer: ([price, volume]) => ({ price, volume }),
+        dataLabel: 'orders'
+      },
+      {
+        baseURL:
+          'https://poloniex.com/public?command=returnOrderBook&currencyPair=USDT_BTC&depth=25',
+        selector: resp => resp.data.bids[0][0],
+        dataLabel: 'price'
+      }
+    ],
+    link: 'https://api.binance.com/api/v1/depth?symbol=BTCUSDT',
+    fees: 0.25,
+    currency: 'USD',
+    type: 'buy'
   }
 ]
 
