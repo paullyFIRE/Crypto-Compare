@@ -49,6 +49,11 @@ const config = [
       ).toFixed(2)
   },
   {
+    heading: 'Net Difference before recycle',
+    valueSelector: ([index, row]) =>
+      parseFloat((row.sell.transactionAmount - row.totalFees) * 0.51).toFixed(2)
+  },
+  {
     heading: 'Net Difference (R)',
     valueSelector: ([index, row]) => parseFloat(row.netDifference - row.totalFees).toFixed(2)
   }
