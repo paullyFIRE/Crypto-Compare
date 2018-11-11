@@ -11,16 +11,6 @@ class Table extends React.Component {
     this.toggleSort = this.toggleSort.bind(this)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (
-      nextState.sortIndex === this.state.sortIndex ||
-      nextState.sortOrder === this.state.sortOrder
-    ) {
-      return false
-    }
-    return true
-  }
-
   toggleSort(index) {
     const columnIndex = index.nativeEvent.srcElement.cellIndex
 
@@ -40,8 +30,8 @@ class Table extends React.Component {
   transformData(rows) {
     const { sortOrder, sortIndex } = this.state
 
-    return rows.sort(
-      (a, b) => (sortOrder === 'ASC' ? a[sortIndex] - b[sortIndex] : b[sortIndex] - a[sortIndex])
+    return rows.sort((a, b) =>
+      sortOrder === 'ASC' ? a[sortIndex] - b[sortIndex] : b[sortIndex] - a[sortIndex]
     )
   }
 

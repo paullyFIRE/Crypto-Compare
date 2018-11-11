@@ -4,9 +4,6 @@ import { MarginTable, CurrencyTable, ExchangesTable, Table } from './components'
 import { MarginDetail } from './containers'
 import io from 'socket.io-client'
 
-const port = process.env.PORT
-console.log('port: ', port)
-
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -18,23 +15,6 @@ export default class App extends Component {
       margins: []
     }
   }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.lastPollUpdate !== this.state.lastPollUpdate) {
-      if (this.ticker) {
-        clearInterval(this.ticker)
-      }
-
-      this.ticker = setInterval(() => {
-        this.forceUpdate()
-      }, 1000)
-    }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.ticker)
-  }
-
   _refreshStats() {
     this.socket.send('RESET')
   }
@@ -59,8 +39,6 @@ export default class App extends Component {
   render() {
     const { margins, currencies, exchanges, lastPollUpdate } = this.state
 
-    const elapsedTime = Math.floor((new Date() - lastPollUpdate) / 1000)
-
     return [
       <Router key={1}>
         <div style={{ marginTop: 25 }}>
@@ -70,13 +48,13 @@ export default class App extends Component {
                 Home
               </Link>
             </li>
-            <li style={{ marginLeft: 25, fontSize: 22  }}>
+            <li style={{ marginLeft: 25, fontSize: 22 }}>
               <Link to="/currencies">Currencies</Link>
             </li>
-            <li style={{ marginLeft: 25, fontSize: 22  }}>
+            <li style={{ marginLeft: 25, fontSize: 22 }}>
               <Link to="/exchanges">Exchanges</Link>
             </li>
-            <li style={{ marginLeft: 25, fontSize: 22  }}>
+            <li style={{ marginLeft: 25, fontSize: 22 }}>
               <Link to="/margins">Margins</Link>
             </li>
           </ul>
@@ -86,7 +64,7 @@ export default class App extends Component {
               className="btn btn-primary text-center mx-auto"
               onClick={() => this._refreshStats()}
             >
-              {`Click Here to Refresh (Updated ${elapsedTime} ago)`}
+              {`Click Here to Refresh`}
             </button>
           </div>
 

@@ -81,6 +81,26 @@ const exchanges = [
     fees: 0.25,
     currency: 'USD',
     type: 'buy'
+  },
+  {
+    exchangeName: 'Binance',
+    apiData: [
+      {
+        baseURL: 'https://api.binance.com/api/v1/depth?symbol=BTCUSDT',
+        selector: resp => resp.data.bids.slice(0, 30),
+        normalizer: ([price, volume]) => ({ price, volume }),
+        dataLabel: 'orders'
+      },
+      {
+        baseURL: 'https://api.binance.com/api/v1/depth?symbol=BTCUSDT',
+        selector: resp => resp.data.bids[0][0],
+        dataLabel: 'price'
+      }
+    ],
+    link: 'https://api.binance.com/api/v1/depth?symbol=BTCUSDT',
+    fees: 0.1,
+    currency: 'USD',
+    type: 'buy'
   }
 ]
 
@@ -92,7 +112,7 @@ const currencies = [
   }
 ]
 
-const volumes = [0.25, 0.5, 1, 2, 3]
+const volumes = [0.05, 0.25, 0.5, 1, 2, 3]
 
 module.exports = {
   exchanges,
