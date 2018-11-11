@@ -49,13 +49,26 @@ const config = [
       ).toFixed(2)
   },
   {
-    heading: 'Net Difference before recycle',
+    heading: 'Recycle Fees (Kraken/Luno Only)',
     valueSelector: ([index, row]) =>
-      parseFloat((row.sell.transactionAmount - row.totalFees) * 0.51).toFixed(2)
+      parseFloat((row.sell.transactionAmount - row.totalFees) * 0.0051).toFixed(2)
   },
   {
-    heading: 'Net Difference (R)',
-    valueSelector: ([index, row]) => parseFloat(row.netDifference - row.totalFees).toFixed(2)
+    heading: 'Net Profit (R)',
+    valueSelector: ([index, row]) =>
+      parseFloat(
+        row.netDifference - row.totalFees - (row.sell.transactionAmount - row.totalFees) * 0.0051
+      ).toFixed(2)
+  },
+  {
+    heading: 'Net Profit (%)',
+    valueSelector: ([index, row]) =>
+      parseFloat(
+        (row.netDifference -
+          row.totalFees -
+          (row.sell.transactionAmount - row.totalFees) * 0.0051) /
+          row.buy.transactionAmount * 100
+      ).toFixed(2)
   }
 ]
 
