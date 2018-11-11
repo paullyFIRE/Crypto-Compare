@@ -88,7 +88,7 @@ const Margins = socket => {
         orders
       }
 
-      if (!fees) return marginBase
+      if (!fees && fees !== 0) return marginBase
 
       const baseFee = orders.reduce(
         (acc, marginOrder) =>
