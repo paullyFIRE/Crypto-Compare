@@ -123,6 +123,28 @@ const exchanges = [
     fees: 0.25,
     currency: 'USD',
     type: 'buy'
+  },
+  {
+    exchangeName: 'Huobi',
+    apiData: [
+      {
+        baseURL:
+          'https://api.huobipro.com/market/depth?symbol=btcusdt&type=step0',
+        selector: resp => resp.data.tick.bids.slice(0, 30),
+        normalizer: ([price, volume]) => ({ price, volume }),
+        dataLabel: 'orders'
+      },
+      {
+        baseURL:
+          'https://api.huobipro.com/market/depth?symbol=btcusdt&type=step0',
+        selector: resp => resp.data.tick.bids[0][0],
+        dataLabel: 'price'
+      }
+    ],
+    link: 'https://api.binance.com/api/v1/depth?symbol=BTCUSDT',
+    fees: 0.2,
+    currency: 'USD',
+    type: 'buy'
   }
 ]
 
