@@ -13,6 +13,7 @@ const exchanges = [
         dataLabel: 'orders'
       }
     ],
+    link: 'https://www.luno.com/en/price',
     fees: 0.75,
     currency: 'ZAR',
     type: 'sell'
@@ -33,6 +34,7 @@ const exchanges = [
       }
     ],
     fees: 1,
+    link: 'https://ice3x.com/',
     currency: 'ZAR',
     type: 'sell'
   },
@@ -56,6 +58,7 @@ const exchanges = [
         dataLabel: 'fees'
       }
     ],
+    link: 'https://trade.kraken.com/markets/kraken/btc/eur',
     currency: 'USD',
     type: 'buy'
   },
@@ -74,6 +77,7 @@ const exchanges = [
         dataLabel: 'price'
       }
     ],
+    link: 'https://www.bitstamp.net/market/tradeview/',
     fees: 0.25,
     currency: 'USD',
     type: 'buy'

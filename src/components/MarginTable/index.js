@@ -7,11 +7,13 @@ import { formatRowDataWithConfigSelectors, getHeadingsFromConfig } from '../../l
 const config = [
   {
     heading: 'Buy Exchange',
-    valueSelector: ([index, row]) => `${row.buy.name}`
+    valueSelector: ([index, row]) => `${row.buy.name}`,
+    link: ([index, row]) => `${row.buy.link}`
   },
   {
     heading: 'Sell Exchange',
-    valueSelector: ([index, row]) => `${row.sell.name}`
+    valueSelector: ([index, row]) => `${row.sell.name}`,
+    link: ([index, row]) => `${row.sell.link}`
   },
   {
     heading: 'Volume',
@@ -34,8 +36,17 @@ const config = [
     valueSelector: ([index, row]) => parseFloat(row.netDifference).toFixed(2)
   },
   {
-    heading: 'Total Fees (R)',
-    valueSelector: ([index, row]) => parseFloat(row.totalFees).toFixed(2)
+    heading: 'Total Fees + R30 (R)',
+    valueSelector: ([index, row]) => parseFloat(row.totalFees + 30).toFixed(2)
+  },
+  {
+    heading: 'Net Margin (%)',
+    valueSelector: ([index, row]) =>
+      parseFloat(
+        ((row.sell.transactionAmount - row.buy.transactionAmount - row.totalFees) /
+          row.buy.transactionAmount) *
+          100
+      ).toFixed(2)
   },
   {
     heading: 'Net Difference (R)',
