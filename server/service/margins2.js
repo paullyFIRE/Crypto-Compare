@@ -68,7 +68,6 @@ const Margins = socket => {
   }
 
   const mapMargins = exchange => {
-    this.broadcast(exchange)
     const { orders: marketBook, currency, fees } = exchange
 
     if (!marketBook || !marketBook.length) return { ...exchange, margins: [] }

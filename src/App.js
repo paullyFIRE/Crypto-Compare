@@ -43,6 +43,7 @@ export default class App extends Component {
     const buyEx = exchanges.buy ? [...exchanges.buy] : []
 
     const exchangeData = [...sellEx, ...buyEx]
+    console.log('exchangeData: ', exchangeData);
 
     return [
       <Router key={1}>
