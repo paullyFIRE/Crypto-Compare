@@ -8,8 +8,8 @@ const Margins = socket => {
   this.currencies = {}
   this.margins = []
 
-  this.broadcast = () => {
-    socket.send(this.getState())
+  this.broadcast = message => {
+    socket.send(message || this.getState())
   }
 
   this.updateCurrency = async () => {
@@ -68,6 +68,7 @@ const Margins = socket => {
   }
 
   const mapMargins = exchange => {
+    this.broadcast(exchange)
     const { orders: marketBook, currency, fees } = exchange
 
     if (!marketBook) return { ...exchange, margins: [] }
