@@ -1,5 +1,6 @@
 var x = require('x-ray')()
 const makeDriver = require('request-x-ray')
+const request = require('request')
 
 const options = {
   headers: {

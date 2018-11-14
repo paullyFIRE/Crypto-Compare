@@ -71,7 +71,7 @@ const Margins = socket => {
     this.broadcast(exchange)
     const { orders: marketBook, currency, fees } = exchange
 
-    if (!marketBook) return { ...exchange, margins: [] }
+    if (!marketBook || !marketBook.length) return { ...exchange, margins: [] }
 
     const exchangeMargins = volumes.map(volumeThreshhold => {
       const { price: marginPrice, orders } = weightedAveragePriceByThreshhold(
