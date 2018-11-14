@@ -79,7 +79,8 @@ const Margins = socket => {
         volumeThreshhold
       )
 
-      const price = marginPrice * (currency !== 'ZAR' ? this.currencies[currency].rate : 1)
+      const price =
+        marginPrice && marginPrice * (currency !== 'ZAR' ? this.currencies[currency].rate : 1)
 
       const marginBase = {
         price: parseInt(price, 10),

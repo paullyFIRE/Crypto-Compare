@@ -39,14 +39,10 @@ export default class App extends Component {
   render() {
     const { margins, currencies, exchanges, lastPollUpdate } = this.state
 
-    const exchangeData = []
+    const sellEx = exchanges.sell ? [...exchanges.sell] : []
+    const buyEx = exchanges.buy ? [...exchanges.buy] : []
 
-    if (exchanges.sell) {
-      exchangeData.push(...exchanges.sell)
-    }
-    if (exchanges.buy) {
-      exchangeData.push(...exchanges.buy)
-    }
+    const exchangeData = [...sellEx, ...buyEx]
 
     return [
       <Router key={1}>
