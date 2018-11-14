@@ -42,7 +42,6 @@ const Margins = socket => {
       let exchangePrices
 
       exchangePrices = await Promise.all(compileApiCalls(exchanges, API.GET))
-      console.log('exchangePrices: ', exchangePrices);
 
       const exchangesWithData = exchanges.map(
         ({ exchangeName, type, currency, apiData, ...configConsts }) => ({
