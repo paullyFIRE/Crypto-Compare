@@ -91,12 +91,23 @@ class MarginTable extends React.Component {
   onChangeBuyList(value) {
     const el = value.nativeEvent.target
     const val = el[el.selectedIndex].value
+    console.log('val: ', val)
+
+    if (val === 'Select') {
+      this.setState({ buyListVal: '' })
+    }
+
     this.setState({ buyListVal: val })
   }
 
   onChangeSellList(value) {
     const el = value.nativeEvent.target
     const val = el[el.selectedIndex].value
+
+    if (val === 'Select') {
+      this.setState({ buyListVal: '' })
+    }
+
     this.setState({ sellListVal: val })
   }
 
@@ -104,18 +115,32 @@ class MarginTable extends React.Component {
     const { buyListVal, sellListVal } = this.state
     const { marginData = [], history } = this.props
     const rowData = formatRowDataWithConfigSelectors(marginData, config)
-    const filteredRowData = rowData.filter(margin => {
-      if (buyListVal && margin[0] !== buyListVal) {
-        return false
-      } else if (sellListVal && margin[1] !== sellListVal) {
-        return false
-      }
+    const filteredRowData = rowData
+      .filter(margin => {
+        if (buyListVal === 'Select') return true
 
-      return true
-    })
+        if (buyListVal && margin[0] !== buyListVal) {
+          return false
+        }
+
+        return true
+      })
+      .filter(margin => {
+        if (sellListVal === 'Select') return true
+
+        if (sellListVal && margin[1] !== sellListVal) {
+          return false
+        }
+
+        return true
+      })
 
     return [
-      <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }} className="container" key={1}>
+      <div
+        style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }}
+        className="container"
+        key={1}
+      >
         <label>Buy Exchange:</label>
         <select value={buyListVal} ref="buyExchange" className="" onChange={this.onChangeBuyList}>
           <option key={0}>Select</option>

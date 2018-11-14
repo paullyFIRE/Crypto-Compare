@@ -9,6 +9,15 @@ const compileApiCalls = (configExchanges, apiGET) =>
       ...exchange.apiData.map(apiCall => {
         const { baseURL, selector, normalizer } = apiCall
 
+        if (typeof baseURL === 'function') {
+          return baseURL()
+            .then(selector)
+            .then(data => ({
+              [apiCall.dataLabel]: data,
+              exchangeName
+            }))
+        }
+
         return apiGET(baseURL, selector, normalizer).then(data => ({
           [apiCall.dataLabel]: data,
           exchangeName

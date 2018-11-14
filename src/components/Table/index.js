@@ -52,22 +52,7 @@ class Table extends React.Component {
   }
 
   renderRows(rows) {
-    return rows.map((row, index) => [
-      <tr
-        // onClick={() =>
-        //   this.props.history.push({
-        //     pathname: '/margin',
-        //     state: {
-        //       headings: this.props.headings,
-        //       row
-        //     }
-        //   })
-        // }
-        key={index}
-      >
-        {this.renderRowItems(row)}
-      </tr>
-    ])
+    return rows.map((row, index) => [<tr key={index}>{this.renderRowItems(row)}</tr>])
   }
 
   render() {
