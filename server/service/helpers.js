@@ -16,6 +16,9 @@ const compileApiCalls = (configExchanges, apiGET) =>
               [apiCall.dataLabel]: data,
               exchangeName
             }))
+            .catch(err => {
+              return { exchangeName, err }
+            })
         }
 
         return apiGET(baseURL, selector, normalizer).then(data => ({

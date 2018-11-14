@@ -1,5 +1,4 @@
 const API = require('./api')
-const { getAltcoinStats } = require('./altScrape')
 const { weightedAveragePriceByThreshhold, compareWeightedAverage } = require('mstats')
 const { compileApiCalls, startWithInterval } = require('./helpers')
 
@@ -156,12 +155,7 @@ const Margins = socket => {
     )
 
     this.margins = margins
-    this.testTransaction()
     this.broadcast()
-  }
-
-  this.testTransaction = () => {
-    getAltcoinStats()
   }
 
   this.forceUpdate = () => {
