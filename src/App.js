@@ -39,6 +39,15 @@ export default class App extends Component {
   render() {
     const { margins, currencies, exchanges, lastPollUpdate } = this.state
 
+    const exchangeData = []
+
+    if (exchanges.sell) {
+      exchangeData.push(...exchanges.sell)
+    }
+    if (exchanges.buy) {
+      exchangeData.push(...exchanges.buy)
+    }
+
     return [
       <Router key={1}>
         <div style={{ marginTop: 25 }}>
@@ -82,13 +91,7 @@ export default class App extends Component {
           <Route path="/margin" component={MarginDetail} />
           <Route
             path="/exchanges"
-            render={() => (
-              <ExchangesTable
-                key={3}
-                title="Exchanges"
-                exchangeData={[...exchanges.buy, ...exchanges.sell]}
-              />
-            )}
+            render={() => <ExchangesTable key={3} title="Exchanges" exchangeData={exchangeData} />}
           />
         </div>
       </Router>
