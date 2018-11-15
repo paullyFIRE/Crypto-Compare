@@ -1,6 +1,6 @@
 {
   "name": "arbitragetracker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "src/index.html",
   "dependencies": {
@@ -9,7 +9,7 @@
     "express": "^4.16.3",
     "express-ws": "^4.0.0",
     "jquery": "^3.3.1",
-    "mstats": "^1.0.1",
+    "mstats": "^1.0.2",
     "parcel": "^1.10.3",
     "popper.js": "^1.14.4",
     "react": "^16.5.2",
