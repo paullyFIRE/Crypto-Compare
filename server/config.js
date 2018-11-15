@@ -1,5 +1,6 @@
 const buyExchanges = require('./buyExchanges')
 const sellExchanges = require('./sellExchanges')
+const experimentalExchanges = require('./stagingExchanges')
 
 const currencies = [
   {
@@ -11,8 +12,10 @@ const currencies = [
 
 const volumes = [0.05, 0.25, 0.5, 1, 2, 3]
 
+const stagingExch = false ? experimentalExchanges : []
+
 module.exports = {
-  exchanges: [...buyExchanges, ...sellExchanges],
+  exchanges: [...buyExchanges, ...sellExchanges, ...stagingExch],
   currencies,
   volumes
 }
