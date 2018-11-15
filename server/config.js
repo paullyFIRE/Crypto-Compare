@@ -12,7 +12,8 @@ const currencies = [
 
 const volumes = [0.05, 0.25, 0.5, 1, 2, 3]
 
-const stagingExch = false ? experimentalExchanges : []
+const port = process.env.PORT || 5000
+const stagingExch = port === 5000 ? experimentalExchanges : []
 
 module.exports = {
   exchanges: [...buyExchanges, ...sellExchanges, ...stagingExch],
