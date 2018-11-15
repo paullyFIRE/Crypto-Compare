@@ -40,7 +40,7 @@ const Margins = socket => {
     try {
       let exchangePrices
 
-      exchangePrices = await Promise.all(compileApiCalls(exchanges, API.GET))
+      exchangePrices = await Promise.all(compileApiCalls(exchanges, API.GET, API.SCRAPE))
 
       const exchangesWithData = exchanges.map(
         ({ exchangeName, type, currency, apiData, ...configConsts }) => ({

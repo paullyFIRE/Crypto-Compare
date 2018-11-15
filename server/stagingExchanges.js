@@ -1,16 +1,35 @@
 const getAltcoinStats = require('./service/altScrape')
+const { x } = require('./service/api')
 
 module.exports = [
   {
     exchangeName: 'AltcoinTrader',
     apiData: [
       {
-        baseURL: getAltcoinStats,
+        baseURL: 'http://www.altcointrader.co.za/',
+        parser: body =>
+          x(body, {
+            askOrders: x('.orderUdBuy', [
+              {
+                price: '.orderUdBPr',
+                volume: '.orderUdBAm'
+              }
+            ])
+          }),
         selector: resp => resp.askOrders,
         dataLabel: 'orders'
       },
       {
-        baseURL: getAltcoinStats,
+        baseURL: 'http://www.altcointrader.co.za/',
+        parser: body =>
+          x(body, {
+            askOrders: x('.orderUdBuy', [
+              {
+                price: '.orderUdBPr',
+                volume: '.orderUdBAm'
+              }
+            ])
+          }),
         selector: resp => resp.askOrders[0].price,
         dataLabel: 'price'
       }

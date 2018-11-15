@@ -1,4 +1,4 @@
-const compileApiCalls = (configExchanges, apiGET) =>
+const compileApiCalls = (configExchanges, apiGET, apiScape) =>
   configExchanges.reduce((acc, exchange) => {
     if (!exchange.apiData) return acc
 
@@ -7,18 +7,15 @@ const compileApiCalls = (configExchanges, apiGET) =>
     return [
       ...acc,
       ...exchange.apiData.map(apiCall => {
-        const { baseURL, selector, normalizer } = apiCall
+        const { baseURL, parser, selector, normalizer } = apiCall
 
-        if (typeof baseURL === 'function') {
-          return baseURL()
+        if (parser) {
+          return apiScape(baseURL, parser)
             .then(selector)
             .then(data => ({
               [apiCall.dataLabel]: data,
               exchangeName
             }))
-            .catch(err => {
-              return { exchangeName, err, [apiCall.dataLabel]: null }
-            })
         }
 
         return apiGET(baseURL, selector, normalizer).then(data => ({
