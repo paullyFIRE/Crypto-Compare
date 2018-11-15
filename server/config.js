@@ -16,7 +16,7 @@ const port = process.env.PORT || 5000
 const stagingExch = port === 5000 ? experimentalExchanges : []
 
 module.exports = {
-  exchanges: [...buyExchanges, ...sellExchanges, ...experimentalExchanges],
+  exchanges: [...buyExchanges, ...sellExchanges, ...stagingExch],
   currencies,
   volumes
 }
