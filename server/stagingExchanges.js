@@ -1,4 +1,3 @@
-const getAltcoinStats = require('./service/altScrape')
 const { x } = require('./service/api')
 
 module.exports = [
