@@ -1,4 +1,4 @@
-const { x } = require('./service/api')
+const { x } = require('./services/api')
 
 module.exports = [
   {
