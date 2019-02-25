@@ -20,18 +20,28 @@ module.exports = [
         dataLabel: 'orders'
       },
       {
-        baseURL: 'http://www.altcointrader.co.za/',
+        baseURL: 'https://www.altcointrader.co.za/eth',
         parser: body =>
           x(body, {
-            askOrders: x('.orderUdBuy', [
+            askOrders: x('.orderUdSell', [
               {
-                price: '.orderUdBPr',
-                volume: '.orderUdBAm'
+                price: '.orderUdSPr',
+                volume: '.orderUdSAm'
               }
             ])
           }),
-        selector: resp => resp.askOrders[0].price,
+        selector: resp => resp.askOrders,
+        dataLabel: 'ethOrders'
+      }
+    ],
+    postApiData: [
+      {
+        selector: exch => (exch.orders[0] && exch.orders[0].price) || 0,
         dataLabel: 'price'
+      },
+      {
+        selector: exch => (exch.ethOrders[0] && exch.ethOrders[0].price) || 0,
+        dataLabel: 'ethPrice'
       }
     ],
     fees: 0.8,

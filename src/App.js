@@ -1,6 +1,7 @@
+import { CurrencyTable, ExchangesTable, MarginTable, Table } from './components'
+import { Link, Route, BrowserRouter as Router } from 'react-router-dom'
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { MarginTable, CurrencyTable, ExchangesTable, Table } from './components'
+
 import { MarginDetail } from './containers'
 import io from 'socket.io-client'
 
@@ -43,7 +44,6 @@ export default class App extends Component {
     const buyEx = exchanges.buy ? [...exchanges.buy] : []
 
     const exchangeData = [...sellEx, ...buyEx]
-    console.log('exchangeData: ', exchangeData);
 
     return [
       <Router key={1}>

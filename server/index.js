@@ -3,9 +3,7 @@ const app = express()
 const server = require('http').Server(app)
 
 const io = require('socket.io')(server)
-const MarginService = require('./service/margins2')(io)
-
-const { groupByVolume, groupByExchange } = require('./service/helpers')
+const MarginService = require('./services/margins')(io)
 
 app.get('/', app.use(express.static('dist')))
 

@@ -3,20 +3,31 @@ module.exports = [
     exchangeName: 'Kraken',
     apiData: [
       {
-        baseURL: 'https://api.kraken.com/0/public/Ticker?pair=XXBTZUSD',
-        selector: resp => resp.data.result.XXBTZUSD.c[0],
-        dataLabel: 'price'
-      },
-      {
         baseURL: 'https://api.kraken.com/0/public/Depth?pair=XXBTZUSD&count=30',
         selector: resp => resp.data.result.XXBTZUSD.bids,
         normalizer: ([price, volume]) => ({ price, volume }),
         dataLabel: 'orders'
       },
       {
+        baseURL: 'https://api.kraken.com/0/public/Depth?pair=XETHXXBT&count=30',
+        selector: resp => resp.data.result.XETHXXBT.asks,
+        normalizer: ([price, volume]) => ({ price, volume }),
+        dataLabel: 'ethOrders'
+      },
+      {
         baseURL: 'https://api.kraken.com/0/public/AssetPairs?pair=XXBTZUSD&info=fees',
         selector: resp => resp.data.result.XXBTZUSD.fees[0][1],
         dataLabel: 'fees'
+      }
+    ],
+    postApiData: [
+      {
+        selector: exch => (exch.orders[0] && exch.orders[0].price) || 0,
+        dataLabel: 'price'
+      },
+      {
+        selector: exch => (exch.ethOrders[0] && exch.ethOrders[0].price) || 0,
+        dataLabel: 'ethPrice'
       }
     ],
     link: 'https://trade.kraken.com/markets/kraken/btc/eur',

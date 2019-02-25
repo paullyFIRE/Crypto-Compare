@@ -1,8 +1,8 @@
-import React from 'react'
-import { withRouter } from 'react-router-dom'
-import { Table } from '../'
-
 import { formatRowDataWithConfigSelectors, getHeadingsFromConfig } from '../../lib/helpers'
+
+import React from 'react'
+import { Table } from '../'
+import { withRouter } from 'react-router-dom'
 
 const config = [
   {
@@ -34,42 +34,6 @@ const config = [
   {
     heading: 'Gross Difference (R)',
     valueSelector: ([index, row]) => parseFloat(row.netDifference).toFixed(2)
-  },
-  {
-    heading: 'Total Fees + R30 (R)',
-    valueSelector: ([index, row]) => parseFloat(row.totalFees + 30).toFixed(2)
-  },
-  {
-    heading: 'Net Margin (%)',
-    valueSelector: ([index, row]) =>
-      parseFloat(
-        ((row.sell.transactionAmount - row.buy.transactionAmount - row.totalFees) /
-          row.buy.transactionAmount) *
-          100
-      ).toFixed(2)
-  },
-  {
-    heading: 'Recycle Fees (Kraken/Luno Only)',
-    valueSelector: ([index, row]) =>
-      parseFloat((row.sell.transactionAmount - row.totalFees) * 0.0051).toFixed(2)
-  },
-  {
-    heading: 'Net Profit (R)',
-    valueSelector: ([index, row]) =>
-      parseFloat(
-        row.netDifference - row.totalFees - (row.sell.transactionAmount - row.totalFees) * 0.0051
-      ).toFixed(2)
-  },
-  {
-    heading: 'Net Profit (%)',
-    valueSelector: ([index, row]) =>
-      parseFloat(
-        ((row.netDifference -
-          row.totalFees -
-          (row.sell.transactionAmount - row.totalFees) * 0.0051) /
-          row.buy.transactionAmount) *
-          100
-      ).toFixed(2)
   }
 ]
 

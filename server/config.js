@@ -5,8 +5,8 @@ const experimentalExchanges = require('./stagingExchanges')
 const currencies = [
   {
     name: 'USD',
-    baseURL: 'http://free.currencyconverterapi.com/api/v5/convert?q=USD_ZAR&compact=y',
-    rateSelector: resp => resp.data.USD_ZAR.val
+    baseURL: 'https://www.freeforexapi.com/api/live?pairs=USDZAR',
+    rateSelector: resp => resp.data.rates.USDZAR.rate
   }
 ]
 
@@ -16,7 +16,7 @@ const port = process.env.PORT || 5000
 const stagingExch = port === 5000 ? experimentalExchanges : []
 
 module.exports = {
-  exchanges: [...buyExchanges, ...sellExchanges, ...stagingExch],
+  exchanges: [...buyExchanges, ...sellExchanges],
   currencies,
   volumes
 }

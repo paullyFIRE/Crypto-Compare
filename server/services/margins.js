@@ -1,6 +1,11 @@
 const API = require('./api')
 const { weightedAveragePriceByThreshhold, compareWeightedAverage } = require('mstats')
-const { compileApiCalls, startWithInterval } = require('./helpers')
+const {
+  compileApiCalls,
+  startWithInterval,
+  getVolumeOrders,
+  calculateWeightedMean
+} = require('./helpers')
 
 const { currencies, exchanges, volumes } = require('../config')
 
@@ -42,8 +47,8 @@ const Margins = socket => {
 
       exchangePrices = await Promise.all(compileApiCalls(exchanges, API.GET, API.SCRAPE))
 
-      const exchangesWithData = exchanges.map(
-        ({ exchangeName, type, currency, apiData, ...configConsts }) => ({
+      const exchangesWithData = exchanges
+        .map(({ exchangeName, type, currency, apiData, ...configConsts }) => ({
           exchangeName,
           type,
           currency,
@@ -54,13 +59,24 @@ const Margins = socket => {
             {}
           ),
           ...configConsts
+        }))
+        .map(({ postApiData, ...exchKeys }) => {
+          if (!postApiData) return { ...exchKeys }
+
+          return {
+            ...exchKeys,
+            ...postApiData.reduce(
+              (acc, point) => ({ ...acc, [point.dataLabel]: point.selector(exchKeys) }),
+              {}
+            )
+          }
         })
-      )
 
       this.buyExchanges = exchangesWithData.filter(({ type }) => type === 'buy').map(mapMargins)
       this.sellExchanges = exchangesWithData.filter(({ type }) => type === 'sell').map(mapMargins)
       this.exchanges = exchangesWithData
 
+      // this.testTransactions()
       this.calculateMargins()
     } catch (err) {
       new Error(err.message)
@@ -156,7 +172,61 @@ const Margins = socket => {
     )
 
     this.margins = margins
+    // this.testTransactions()
     this.broadcast()
+  }
+
+  this.testTransactions = () => {
+    const ethOrders = [
+      { price: '2705.00000000', volume: '6.65053000' },
+      { price: '2709.99000000', volume: '1.34281199' },
+      { price: '2724.99999999', volume: '0.65900812' },
+      { price: '2748.00000000', volume: '0.99000000' },
+      { price: '2749.00000000', volume: '1.26067899' },
+      { price: '2790.00000000', volume: '1.08676319' },
+      { price: '2850.00000000', volume: '0.01775680' },
+      { price: '2965.00000000', volume: '0.23054126' },
+      { price: '2977.99000000', volume: '1.21795482' },
+      { price: '2990.00000000', volume: '0.55805387' },
+      { price: '2999.99000000', volume: '0.16119813' },
+      { price: '3000.00000000', volume: '1.20000000' },
+      { price: '3050.00000000', volume: '0.02000000' },
+      { price: '3080.00000000', volume: '0.01463898' },
+      { price: '3090.00000000', volume: '0.05381566' },
+      { price: '3100.00000000', volume: '0.01800363' },
+      { price: '3125.00000000', volume: '0.00833280' },
+      { price: '3139.79000000', volume: '0.37277397' },
+      { price: '3144.90000000', volume: '2.32128000' },
+      { price: '3145.00000000', volume: '0.09725491' }
+    ]
+    const ethPrice = ethOrders[0].price
+
+    // console.log(this.buyExchanges)
+    const alt = require('./testData')
+    // const exchangeAlt = this.sellExchanges.find(exch => exch.exchangeName === 'AltcoinTrader')
+    const exchangeAlt = alt
+    const exchangeKraken = this.buyExchanges.find(exch => exch.exchangeName === 'Kraken')
+
+    const initialBTC = 0.05
+    // const balanceAfterBTCTransfer = initialBTC * 0.99
+    const balanceAfterBTCTransfer = initialBTC
+    // const zarFromBTC = balanceAfterBTCTransfer * exchangeAlt.price * 0.992
+    const zarFromBTC = balanceAfterBTCTransfer * exchangeAlt.price
+
+    console.log('exchangeAlt.ethPrice: ', ethPrice)
+    // const ETHFromZar = (zarFromBTC / ethPrice) * 0.992
+    const ETHFromZar = zarFromBTC / ethPrice
+    console.log('ETHFromZar: ', ETHFromZar)
+
+    const { orders, availableVolume } = getVolumeOrders(ethOrders, ETHFromZar)
+    const ethAvgPrice = calculateWeightedMean(orders, availableVolume)
+    console.log('ethAvgPrice: ', ethAvgPrice)
+    // const ethAfterEthTransfer = ETHFromZar - 0.01
+    const ethAfterEthTransfer = ETHFromZar
+    console.log('ethAfterEthTransfer: ', ethAfterEthTransfer)
+
+    const btcOnKraken = ethAfterEthTransfer * exchangeKraken.ethPrice
+    console.log('btcOnKraken: ', btcOnKraken)
   }
 
   this.forceUpdate = () => {
@@ -171,7 +241,7 @@ const Margins = socket => {
 
   this.startPolls = () => {
     this.zarInterval = startWithInterval(this.updateCurrency, 1000 * 60 * 15)
-    this.marginIntervals = startWithInterval(this.pollPrices, 1000 * 30)
+    this.marginIntervals = startWithInterval(this.pollPrices, 1000 * 60 * 2.5)
   }
 
   this.init = async () => {
